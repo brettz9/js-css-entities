@@ -1,0 +1,16 @@
+HTML-BASED CUSTOM ENTITY REFERENCES are unfortunately not supported in text/html 
+(only application/xhtml+xml allows them if the processor supports entities (it is possible only
+internal ones may be supported) which should theoretically support at least a non-single-point-of-failure
+fallback, but most browsers cause the document to fail completely on encountering an entity reference).
+
+The JavaScript and CSS (and XML) approaches are all possible, though technically discouraged since
+some people might not enable JavaScript or CSS (and XML support is currently inconsistent as far
+as entities, particularly with regard to external entities).
+
+JavaScript-utilized entity declarations offer the benefit of being able to customize the code so
+as to define the replacement element entirely (e.g., to allow treating an entity as a kind of
+text-driven widget).
+
+3. Can also make entity declarations in CSS, though not the numeric ones (which are really redundant 
+anyways since HTML supports numeric character references); an advantage is that it does not require 
+loading an extra file as with the JavaScript approach, though it is a little more "technical" to write. 

@@ -1,0 +1,30 @@
+<html>
+<head>
+    <!-- 1. Can make JavaScript-utilized entity declarations in HTML -->
+    <meta name="entity" content="repeat=My repeatable text" />
+    <meta name="entity" content="hello=Hi there!" />
+    
+    <!-- 2. Oan also make JavaScript-utilized entity declarations in JavaScript (useful externally
+    since client-side includes are lamentably missing (as are easy JS import statements)) -->
+    <script>
+    var JSEntityMap = {sky: 'heavenly blue'};
+    </script>
+
+    <!-- Attach required library file -->
+    <script src="entities.js"></script>    
+</head>
+<body>
+
+<!-- Note for the below, that unless we use application/xhtml+xml, we cannot 
+reliably use self-closing elements in HTML -->
+
+<!-- JAVASCRIPT-BASED CUSTOM ENTITY REFERENCES -->
+<entity hex="123F"></entity>
+<entity dec="12354"></entity>
+<entity name="hello"></entity> <!-- For hiding or consistency with other forms -->
+<entity>repeat</entity> <!-- For fall-back display until load or if JavaScript disabled-->
+<entity>sky</entity>
+<entity name="sky"></entity>
+
+</body>
+</html>

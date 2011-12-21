@@ -1,0 +1,52 @@
+<html>
+<head>    
+    <!-- 1. Can make JavaScript-utilized entity declarations in HTML -->
+    <meta name="entity" content="repeat=My repeatable text" />
+    <meta name="entity" content="hello=Hi there!" />
+    
+    <!-- 2. Can also make JavaScript-utilized entity declarations in JavaScript (useful externally
+    since client-side includes are lamentably missing (as are easy JS import statements)) -->
+    <script>
+    var JSEntityMap = {sky: 'heavenly blue'};
+    </script>
+
+    <!-- 3. Can also make entity declarations in CSS. -->
+    <style>
+        ent[name=aName]:before {
+            content:'Luke Skywalker';
+            color:red; /* Offers benefit of letting us style text in a consistent way; 
+                            we could also change certain entity types to block display */
+        }
+        
+        /* Being silly (unless we have a need to display text only for CSS users), 
+            we allow the entity to be declared inline */
+        ent[name=myName][value]:before {
+            content: attr(value)
+        }
+    </style>
+
+    <!-- Attach required library file -->
+    <script src="entities.js"></script>    
+</head>
+<body>
+
+<!-- Note for the below, that unless we use application/xhtml+xml, we cannot 
+reliably use self-closing elements in HTML -->
+
+<!-- JAVASCRIPT-BASED CUSTOM ENTITY REFERENCES -->
+<entity hex="123F"></entity>
+<entity dec="12354"></entity>
+<entity name="hello"></entity> <!-- For hiding or consistency with other forms -->
+<entity>repeat</entity> <!-- For fall-back display until load or if JavaScript disabled-->
+<entity>sky</entity>
+<entity name="sky"></entity>
+
+<!-- CSS-BASED CUSTOM ENTITY REFERENCES -->
+<!-- Note that we cannot put content inside as a fall-back with CSS though, 
+as the "content" property will use the same visibility as the contents-->
+
+<ent name="aName"></ent>
+<ent name="myName" value="Brett Zamir"></ent>
+
+</body>
+</html>

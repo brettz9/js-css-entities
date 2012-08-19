@@ -11,7 +11,9 @@
     </script>
 
     <!-- Attach required library file -->
-    <script src="entities.js"></script>    
+    <!-- append ?global=e to define "entity" function (of any global name) -->
+    <!-- append &element=data to use standard <data data-ent="{name}"></data> format instead of <entity ent=""></entity> -->
+    <script src="entities.js?global=e"></script>
 </head>
 <body>
 
@@ -21,10 +23,10 @@ reliably use self-closing elements in HTML -->
 <!-- JAVASCRIPT-BASED CUSTOM ENTITY REFERENCES -->
 <entity hex="123F"></entity>
 <entity dec="12354"></entity>
-<entity name="hello"></entity> <!-- For hiding or consistency with other forms -->
+<entity ent="hello"></entity> <!-- For hiding or consistency with other forms -->
 <entity>repeat</entity> <!-- For fall-back display until load or if JavaScript disabled-->
 <entity>sky</entity>
-<entity name="sky"></entity>
+<entity ent="sky"></entity>
 <script>e('sky')</script>
 <script>e('repeat')</script>
 

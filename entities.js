@@ -1,21 +1,49 @@
 (function () {
-    // PRIVATE UTILITIES
+    // PRIVATE STATIC UTILITIES
+    /**
+    * @private
+    * @constant
+    */
     function fixedFromCharCode (codePt) {
         if (codePt > 0xFFFF) {
             codePt -= 0x10000;
-            return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 +
-    (codePt & 0x3FF));
+            return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 + (codePt & 0x3FF));
         }
         else {
             return String.fromCharCode(codePt);
         }
     }
+    
+    /**
+    * @private
+    * @constant
+    */
+    function preg_quote (str, delimiter) {
+        // http://kevin.vanzonneveld.net
+        return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+    }
+
+    /**
+    * @private
+    * @constant
+    */
+    function getURLQueryParam (name) {
+        var pattern = new RegExp('[?&]' + preg_quote(name) + '=([^&]*)(?:[&]|$)');
+        var value = currentScriptURL.match(pattern);
+        return value ? decodeURIComponent(value[1]) : null;
+    }
+    
+    /**
+    * @private
+    * @constant
+    */
     function replaceNodeWithText (node, value) {
         node.parentNode.replaceChild(
                 document.createTextNode(value), 
                 node
         );
     }
+    
     function setText (lookup) {
         if (!map[lookup]) {
             alert(
@@ -29,7 +57,11 @@
     
     var text, lookup, entity,
         d = document, 
-        entityReferenceName = 'entity', // could change to "data" for standard approach
+        scripts = document.getElementsByTagName('script'), // Doesn't need to be onload as only getting this script
+        currentScriptURL = scripts[scripts.length-1].src,
+        globalFunction = getURLQueryParam('global'),
+        element = getURLQueryParam('element'),
+        entityReferenceName =  element || 'entity', // could change to "data" for standard approach
         attPrefix = entityReferenceName === 'data' ? 'data-' : '',
         map = JSEntityMap ? JSEntityMap : {},
         // Might want these next two configurable:
@@ -43,11 +75,11 @@
     //  so document.write method e() doesn't need to wait for page domcontentloaded)
     Array.prototype.forEach.call(metas, function (meta) { // Shortcut Array.forEach() not currently supported in Chrome
         var pair;
-        if (    meta.hasAttribute(attPrefix+'content') && 
-                meta.hasAttribute(attPrefix+'name') && 
-                meta.getAttribute(attPrefix+'name') === 'entity'
+        if (    meta.hasAttribute('content') && 
+                meta.hasAttribute('name') && 
+                meta.getAttribute('name') === 'entity'
             ) {
-            pair = meta.getAttribute(attPrefix+'content').split('=', 2);
+            pair = meta.getAttribute('content').split('=', 2);
             map[pair[0]] = pair[1];
         }
     });
@@ -68,7 +100,11 @@
                 text = fixedFromCharCode(parseInt(entity.getAttribute(attPrefix+'hex'), 16));
             }
             else {
-                lookup = entity.hasAttribute(attPrefix+'name') ? entity.getAttribute(attPrefix+'name') : entity.textContent;
+                lookup = entity.hasAttribute(attPrefix+'ent') ? entity.getAttribute(attPrefix+'ent') : 
+                            entityReferenceName === 'data' ? false : entity.textContent;
+                if (lookup === false) { // Disallow plain <data> elements as could be used for other purposes
+                    break;
+                }
                 setText(lookup);
             }
             replaceNodeWithText(entity, text);
@@ -76,9 +112,10 @@
     });
     
     // EXPORTS
-    // Comment out to avoid globals
-    this.e = function (lookup) {
-        setText(lookup);
-        document.write(text);
-    };
+    if (globalFunction) {
+        this[globalFunction] = function (lookup) {
+            setText(lookup);
+            document.write(text);
+        };
+    }
 }());

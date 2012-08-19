@@ -40,7 +40,10 @@ defining entities are possible (not including XML):
         i) Via definition of properties on a "JSEntityMap" global JavaScript 
             object defined before the entities.js file is included
         ii) Via HTML meta elements with name set to "entity" and "content" 
-            attribute set to "{entity name}={entity name}"
+            attribute set to "{entity name}={entity name}"; script also
+            allows retrieval of meta elements defined in an iframe in the
+            body of the document so that this approach will also allow 
+            external file definitions
     b) Advantages:
         i) Can substitute with arbitrary HTML
         ii) Should work well in all well-used browsers

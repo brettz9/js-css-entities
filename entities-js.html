@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <!-- 1. Can make JavaScript-utilized entity declarations in HTML -->
@@ -17,18 +18,27 @@
 </head>
 <body>
 
+<!-- onload call must be added manually for IE -->
+<iframe src="external-entity-file.html" data-meta="" onload="entityIframeLoad(event);"></iframe>
+
 <!-- Note for the below, that unless we use application/xhtml+xml, we cannot 
 reliably use self-closing elements in HTML -->
 
-<!-- JAVASCRIPT-BASED CUSTOM ENTITY REFERENCES -->
+<!-- JAVASCRIPT/HTML-BASED CUSTOM ENTITY REFERENCES -->
 <entity hex="123F"></entity>
 <entity dec="12354"></entity>
 <entity ent="hello"></entity> <!-- For hiding or consistency with other forms -->
 <entity>repeat</entity> <!-- For fall-back display until load or if JavaScript disabled-->
 <entity>sky</entity>
 <entity ent="sky"></entity>
+
+<!-- JAVASCRIPT/HTML-BASED IFRAME-LOADED CUSTOM ENTITY REFERENCES -->
+<entity ent="meta-included-entity"></entity>
+
+<!-- JAVASCRIPT-BASED CUSTOM ENTITY REFERENCES -->
 <script>e('sky')</script>
 <script>e('repeat')</script>
+
 
 </body>
 </html>

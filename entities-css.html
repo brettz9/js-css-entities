@@ -1,6 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <!-- 3. Can make entity declarations in CSS. -->
+    <!-- 3. Can also make entity declarations in CSS (allows external use); can remove the script if not supporting IE
+            or add call in entities file. -->
+    <script>document.createElement('ent');</script>
     <style>
         ent[ent=aName]:before {
             content:'Luke Skywalker';

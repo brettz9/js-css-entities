@@ -1,16 +1,54 @@
-HTML-BASED CUSTOM ENTITY REFERENCES are unfortunately not supported in text/html 
-(only application/xhtml+xml allows them if the processor supports entities (it is possible only
-internal ones may be supported) which should theoretically support at least a non-single-point-of-failure
-fallback, but most browsers cause the document to fail completely on encountering an entity reference).
+HTML-BASED CUSTOM ENTITY REFERENCES are unfortunately not supported in 
+text/html (and XML support is spotty), despite their convenience in
+authoring, especially for non-technical authors or those who wish to
+share and utilize documents stored on the local file system without
+a server to execute substitutions.
 
-The JavaScript and CSS (and XML) approaches are all possible, though technically discouraged since
-some people might not enable JavaScript or CSS (and XML support is currently inconsistent as far
-as entities, particularly with regard to external entities).
+All of the following client-side approaches are possible, though they may be
+technically discouraged for universal access since some people might not 
+enable JavaScript or CSS (and XML support is currently inconsistent as 
+far as entities, particularly with regard to external entities).
 
-JavaScript-utilized entity declarations offer the benefit of being able to customize the code so
-as to define the replacement element entirely (e.g., to allow treating an entity as a kind of
-text-driven widget).
-
-3. Can also make entity declarations in CSS, though not the numeric ones (which are really redundant 
-anyways since HTML supports numeric character references); an advantage is that it does not require 
-loading an extra file as with the JavaScript approach, though it is a little more "technical" to write. 
+The example files detail the usage, but to summarize, the following means of
+defining entities are possible (not including XML):
+1) Via XML
+    a) Advantages:
+        i) Does not require script file
+        ii) Behavior defined in a standard
+        iii) Easy to write definitions and references
+    b) Disadvantages:
+        i) Browser support varies with single-point-of-failure for 
+            externally defined entities not found in the internal
+            subset and no fallbacks despite the XML specification's
+            recommendations.
+        ii) Requires less-used XML syntax and application/xhtml+xml 
+            content-type
+2) Via use of the CSS content property
+    a) Advantages: 
+        i) Does not require script file
+        ii) Allows external file usage
+    b) Disadvantages:
+        i) Browser support varies
+        ii) Somewhat cumbersome to write
+        iii) Does not allow numeric definitions as allowed by the JavaScript 
+            code (though the latter are really redundant anyways since HTML 
+            supports numeric character references)).
+        iv) Does not allow arbitrary HTML substitution--only text
+        v) Requires CSS to be enabled
+3) Via JavaScript:
+    a) Approaches:
+        i) Via definition of properties on a "JSEntityMap" global JavaScript 
+            object defined before the entities.js file is included
+        ii) Via HTML meta elements with name set to "entity" and "content" 
+            attribute set to "{entity name}={entity name}"
+    b) Advantages:
+        i) Can substitute with arbitrary HTML
+        ii) Should work well in all well-used browsers
+        iii) Easy to write definitions and references
+        iv) Allows external file usage
+    c) Disadvantages:
+        i) Requires JavaScript enabled by user
+        ii) Requires inclusion and execution of external JavaScript file,
+            waiting for content-load (and iframe load, if iframe definitions 
+            are used).
+        

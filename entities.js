@@ -44,6 +44,14 @@
         );
     }
     
+    function insertBeforeNodeWithText (node, value) {
+        node.parentNode.insertBefore(
+                document.createTextNode(value), 
+                node
+        );
+    }
+    
+    
     function setText (lookup) {
         if (!map[lookup]) {
             alert(
@@ -81,6 +89,17 @@
                 }
             }
             replaceNodeWithText(entity, text);
+        }
+        
+        var scripts = d.getElementsByTagName('script');
+        for (var i=0, sl = scripts.length; i < sl; i++) {
+            var script = scripts[i];
+            var lookup = script.innerHTML.match(/^\s*e\(['"](\w+)['"]\)\s*$/);
+            if (lookup) {
+                setText(lookup[1]);
+                // We do not replace the node, as replacing script apparently not allowed and messes up the loop
+                insertBeforeNodeWithText(script, text);
+            }
         }
     }
 
@@ -197,9 +216,11 @@
     
     // EXPORTS
     if (globalFunction) {
+        // Will not work with external files, as document.write operates immediately
         this[globalFunction] = function (lookup) {
-            setText(lookup);
-            document.write(text);
+            // Being handled elsewhere, but still need a function to keep it short (could do with script type) and explicit (could do with just string and no function call, but not clear for entities)
+            //setText(lookup);
+            //document.write(text);
         };
     }
     this.entityIframeLoad = entityIframeLoad; // Needed by IE which needs inline onload on iframes

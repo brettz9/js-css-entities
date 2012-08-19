@@ -10,12 +10,13 @@ enable JavaScript or CSS (and XML support is currently inconsistent as
 far as entities, particularly with regard to external entities).
 
 The example files detail the usage, but to summarize, the following means of
-defining entities are possible (not including XML):
+defining entities are possible:
 1) Via XML
     a) Advantages:
         i) Does not require script file
         ii) Behavior defined in a standard
         iii) Easy to write definitions and references
+        iv) Allows for recursive entities
     b) Disadvantages:
         i) Browser support varies with single-point-of-failure for 
             externally defined entities not found in the internal
@@ -35,7 +36,8 @@ defining entities are possible (not including XML):
             supports numeric character references)).
         iv) Does not allow arbitrary HTML substitution--only text
         v) Requires CSS to be enabled
-3) Via JavaScript:
+        vi) Does not support recursive definitions
+3) Via JavaScript (with optional HTML definitions):
     a) Approaches:
         i) Via definition of properties on a "JSEntityMap" global JavaScript 
             object defined before the entities.js file is included
@@ -44,14 +46,35 @@ defining entities are possible (not including XML):
             allows retrieval of meta elements defined in an iframe in the
             body of the document so that this approach will also allow 
             external file definitions
+        iii) Library does not currently support recursive definitions
     b) Advantages:
         i) Can substitute with arbitrary HTML
         ii) Should work well in all well-used browsers
         iii) Easy to write definitions and references
         iv) Allows external file usage
     c) Disadvantages:
-        i) Requires JavaScript enabled by user
+        i) Requires JavaScript enabled by user (though at least fallbacks 
+            can be used if desired)
         ii) Requires inclusion and execution of external JavaScript file,
             waiting for content-load (and iframe load, if iframe definitions 
             are used).
-        
+
+The following means exist for creating entity references using the above
+approaches:
+1) Via XML:
+    a) Entity references
+2) Via use of the CSS content property
+    a) Empty HTML elements
+        i) Custom elements for simple and descriptive but non-standard 
+            references (e.g.,  or <entity ent=>)--also requires special 
+            JavaScript handling in older IE browsers
+        ii) HTML4 tags (e.g., div or span)
+        iii) HTML5-standard "data" tag with "data-ent" attribute
+3) Via HTML (in conjunction with JavaScript library and definitions):
+    a) Empty HTML elements (or elements with fallback content for
+        page load)
+        i) Custom elements for simple and descriptive but non-standard 
+            references (e.g., <entity> or <entity ent=>)
+        ii) HTML4 tags (e.g., div or span) with "data-ent" attribute
+        iii) HTML5-standard "data" tag with "data-ent" attribute
+    b) Script tags (<script>e('{entity name}')</script>)

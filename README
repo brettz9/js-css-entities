@@ -11,7 +11,7 @@ far as entities, particularly with regard to external entities).
 
 The example files detail the usage, but to summarize, the following means of
 defining entities are possible:
-1) Via XML
+1) Via XML entities
     a) Advantages:
         i) Does not require script file
         ii) Behavior defined in a standard
@@ -23,8 +23,21 @@ defining entities are possible:
             subset and no fallbacks despite the XML specification's
             recommendations.
         ii) Requires less-used XML syntax and application/xhtml+xml 
-            content-type
-2) Via use of the CSS content property
+            or application/xml content-type
+2) Via XML (namespaced) elements harvested for definitions by 
+    XSL or XSL variables
+    a) Advantages:
+        i) Pretty good browser support
+        ii) Not difficult to write definitions and references
+        iii) Allows for nested entities?
+    b) Disadvantages:
+        i) Not the official way to define replacement text (but will work)
+        ii) Requires less-used XML syntax and application/xhtml+xml 
+            or application/xml content-type
+        iii) Requires additional download of XSL template to 
+            perform replacements
+    b) Disadvantages:
+3) Via use of the CSS content property
     a) Advantages: 
         i) Does not require script file
         ii) Allows external file usage
@@ -37,7 +50,7 @@ defining entities are possible:
         iv) Does not allow arbitrary HTML substitution--only text
         v) Requires CSS to be enabled
         vi) Does not support nested definitions
-3) Via JavaScript (with optional HTML definitions):
+4) Via JavaScript (with optional HTML definitions):
     a) Approaches:
         i) Via definition of properties on a "JSEntityMap" global JavaScript 
             object defined before the entities.js file is included
@@ -61,16 +74,19 @@ defining entities are possible:
 
 The following means exist for creating entity references using the above
 approaches:
-1) Via XML:
+1) Via XML entities:
     a) Entity references
-2) Via use of the CSS content property
+2) Via XML elements
+    b) Can use elements with or without content and let XSL handle
+        substitutions as desired; preferable to use namespace
+3) Via use of the CSS content property
     a) Empty HTML elements
         i) Custom elements for simple and descriptive but non-standard 
             references (e.g.,  or <entity ent=>)--also requires special 
             JavaScript handling in older IE browsers
         ii) HTML4 tags (e.g., div or span)
         iii) HTML5-standard "data" tag with "data-ent" attribute
-3) Via HTML (in conjunction with JavaScript library and definitions):
+4) Via HTML (in conjunction with JavaScript library and definitions):
     a) Empty HTML elements (or elements with fallback content for
         page load)
         i) Custom elements for simple and descriptive but non-standard 

@@ -94,3 +94,4 @@ approaches:
         ii) HTML4 tags (e.g., div or span) with "data-ent" attribute
         iii) HTML5-standard "data" tag with "data-ent" attribute
     b) Script tags (<script>e('{entity name}')</script>)
+

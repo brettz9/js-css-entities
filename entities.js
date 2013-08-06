@@ -37,7 +37,7 @@
 
     /**
     * @private
-    * @constant
+    * @static
     */
     function getURLQueryParam (name) {
         var pattern = new RegExp('[?&]' + preg_quote(name) + '=([^&]*)(?:[&]|$)');
@@ -47,7 +47,7 @@
     
     /**
     * @private
-    * @constant
+    * @static
     */
     function replaceNodeWithText (node, value) {
         node.parentNode.replaceChild(

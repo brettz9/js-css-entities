@@ -4,13 +4,25 @@
     * @private
     * @constant
     */
-    function fixedFromCharCode (codePt) {
-        if (codePt > 0xFFFF) {
-            codePt -= 0x10000;
-            return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 + (codePt & 0x3FF));
-        }
-        else {
-            return String.fromCharCode(codePt);
+    /*!
+    * From: (c) 2012 Steven Levithan <http://slevithan.com/>
+    * MIT License
+    */
+    if (!String.fromCodePoint) {
+        /*!
+        * ES6 Unicode Shims 0.1
+        * (c) 2012 Steven Levithan <http://slevithan.com/>
+        * MIT License
+        */
+        String.fromCodePoint = function fromCodePoint () {
+            var chars = [], point, offset, units, i;
+            for (i = 0; i < arguments.length; ++i) {
+                point = arguments[i];
+                offset = point - 0x10000;
+                units = point > 0xFFFF ? [0xD800 + (offset >> 10), 0xDC00 + (offset & 0x3FF)] : [point];
+                chars.push(String.fromCharCode.apply(null, units));
+            }
+            return chars.join("");
         }
     }
     
@@ -73,10 +85,10 @@
             //   allow a callback or two to check and define text or replacement node
             // The first two conditions are not very helpful since possible as HTML entities
             if (entity.hasAttribute(attPrefix+'dec')) {
-                text = fixedFromCharCode(parseInt(entity.getAttribute(attPrefix+'dec'), 10));
+                text = String.fromCodePoint(parseInt(entity.getAttribute(attPrefix+'dec'), 10));
             }
             else if (entity.hasAttribute(attPrefix+'hex')) {
-                text = fixedFromCharCode(parseInt(entity.getAttribute(attPrefix+'hex'), 16));
+                text = String.fromCodePoint(parseInt(entity.getAttribute(attPrefix+'hex'), 16));
             }
             else {
                 lookup = entity.hasAttribute(attPrefix + 'ent') ? entity.getAttribute(attPrefix + 'ent') : 

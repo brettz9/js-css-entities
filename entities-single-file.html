@@ -12,10 +12,10 @@
     var JSEntityMap = {sky: 'heavenly blue'};
     </script>
     <!-- Attach required library file -->
+    <!-- append ?global=e to define "entity" function (of any global name) -->
+    <!-- append &element=data to use standard <data data-ent="{name}"></data> format
+      instead of <entity ent=""></entity> (or &element=anotherName to use <anotherName ent=""></a>) -->
     <script src="entities.js?global=e"></script>
-
-    <!-- 3. Can also make entity declarations in CSS (allows external use)-->
-    <!--[if lt IE 9]><!--><script>document.createElement('ent');</script><!--<![endif]-->
     <style>
         ent[ent=aName]:before {
             content:'Luke Skywalker';

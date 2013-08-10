@@ -1,4 +1,20 @@
 (function () {
+    'use strict';
+    var text, lookup, entity,
+        globalFunction, element, entityReferenceName, attPrefix,
+        d = document,
+        ct = 0,
+        ifrs = [],
+        scripts = document.getElementsByTagName('script'), // Doesn't need to be onload as only getting this script
+        currentScriptURL = scripts[scripts.length-1].src,
+        map = window.JSEntityMap || {},
+        // Might want these next two configurable:
+        metaHeadOnly = false, // True would be a little faster,
+                                // but wouldn't allow users to define their own
+                                // (e.g., within a comment or wiki system)
+        entities,
+        metas = (metaHeadOnly ? d.head : d).getElementsByTagName('meta');
+
     // PRIVATE STATIC UTILITIES
     /**
     * @private
@@ -23,7 +39,7 @@
                 chars.push(String.fromCharCode.apply(null, units));
             }
             return chars.join("");
-        }
+        };
     }
     
     /**
@@ -32,7 +48,7 @@
     */
     function preg_quote (str, delimiter) {
         // http://kevin.vanzonneveld.net
-        return (str + '').replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+        return String(str).replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
     }
 
     /**
@@ -40,9 +56,9 @@
     * @static
     */
     function getURLQueryParam (name) {
-        var pattern = new RegExp('[?&]' + preg_quote(name) + '=([^&]*)(?:[&]|$)');
-        var value = currentScriptURL.match(pattern);
-        return value ? decodeURIComponent(value[1]) : null;
+        var pattern = new RegExp('[?&]' + preg_quote(name) + '=([^&]*)(?:[&]|$)'),
+            val = currentScriptURL.match(pattern);
+        return val ? decodeURIComponent(val[1]) : null;
     }
     
     /**
@@ -77,7 +93,7 @@
     }
     
     function replaceEntityText () {
-        
+        var scripts, i, sl, script, lookup;
         entities = d.getElementsByTagName(entityReferenceName);
         while (entities.length) {
             entity = entities[0];
@@ -103,10 +119,10 @@
             replaceNodeWithText(entity, text);
         }
         
-        var scripts = d.getElementsByTagName('script');
-        for (var i=0, sl = scripts.length; i < sl; i++) {
-            var script = scripts[i];
-            var lookup = script.innerHTML.match(/^\s*e\(['"](\w+)['"]\)\s*$/);
+        scripts = d.getElementsByTagName('script');
+        for (i = 0, sl = scripts.length; i < sl; i++) {
+            script = scripts[i];
+            lookup = script.innerHTML.match(/^\s*e\(['"](\w+)['"]\)\s*$/);
             if (lookup) {
                 setText(lookup[1]);
                 // We do not replace the node, as replacing script apparently not allowed and messes up the loop
@@ -116,8 +132,9 @@
     }
 
     function addMetasToMap (metas) {
-        for (var i=0, metalen = metas.length; i < metalen; i++) {
-            var pair, meta = metas[i];
+        var i, metalen, pair, meta;
+        for (i = 0, metalen = metas.length; i < metalen; i++) {
+            meta = metas[i];
             if (    meta.hasAttribute('content') && 
                     meta.hasAttribute('name') && 
                     meta.getAttribute('name') === 'entity'
@@ -141,20 +158,23 @@
     }
 
     function addStylesheetRules (decls) {
-        var style = document.createElement('style');
+        var s, i, dl, j, decl, selector, rulesStr, rl, rule, style = document.createElement('style');
         document.getElementsByTagName('head')[0].appendChild(style);
         if (!window.createPopup) { /* For Safari */
            style.appendChild(document.createTextNode(''));
         }
-        var s = document.styleSheets[document.styleSheets.length - 1];
-        for (var i=0, dl = decls.length; i < dl; i++) {
-            var j = 1, decl = decls[i], selector = decl[0], rulesStr = '';
+        s = document.styleSheets[document.styleSheets.length - 1];
+        for (i = 0, dl = decls.length; i < dl; i++) {
+            j = 1;
+            decl = decls[i];
+            selector = decl[0];
+            rulesStr = '';
             if (Object.prototype.toString.call(decl[1][0]) === '[object Array]') {
                 decl = decl[1];
                 j = 0;
             }
-            for (var rl=decl.length; j < rl; j++) {
-                var rule = decl[j];
+            for (rl = decl.length; j < rl; j++) {
+                rule = decl[j];
                 rulesStr += rule[0] + ':' + rule[1] + (rule[2] ? ' !important' : '') + ';\n';
             }
      
@@ -166,7 +186,7 @@
             }
         }
     }
-    function entityIframeLoad (e) {;
+    function entityIframeLoad (e) {
         ct++;
         var iwin = (e.target || e.srcElement).contentWindow,
             idoc = iwin.document,
@@ -174,24 +194,11 @@
         addMetasToMap(imetas);
     }
     
-    var text, lookup, entity,
-        d = document, 
-        ct = 0,
-        ifrs = [],
-        scripts = document.getElementsByTagName('script'), // Doesn't need to be onload as only getting this script
-        currentScriptURL = scripts[scripts.length-1].src,
-        globalFunction = getURLQueryParam('global'),
-        element = getURLQueryParam('element'),
-        entityReferenceName =  element || 'entity', // could change to "data" for standard approach
-        attPrefix = entityReferenceName === 'data' ? 'data-' : '',
-        map = JSEntityMap ? JSEntityMap : {},
-        // Might want these next two configurable:
-        metaHeadOnly = false, // True would be a little faster, 
-                                // but wouldn't allow users to define their own 
-                                // (e.g., within a comment or wiki system)
-        entities,
-        metas = (metaHeadOnly ? d.head : d).getElementsByTagName('meta');
-        
+    globalFunction = getURLQueryParam('global');
+    element = getURLQueryParam('element');
+    entityReferenceName = element || 'entity'; // could change to "data" for standard approach
+    attPrefix = entityReferenceName === 'data' ? 'data-' : '';
+
     // IE will probably need this for styling unless using a standard element like <div> or <span>
     document.createElement(entityReferenceName);
 
@@ -204,10 +211,10 @@
     addMetasToMap(metas);
     
     // EVENT ATTACHMENT    
-    addListener(this, 'DOMContentLoaded', function () {
-        var iframes = d.getElementsByTagName('iframe');
-        for (var i = 0, il = iframes.length; i < il; i++) {
-            var iframe = iframes[i];
+    addListener(window, 'DOMContentLoaded', function () {
+        var i, il, iframe, intrvl, iframes = d.getElementsByTagName('iframe');
+        for (i = 0, il = iframes.length; i < il; i++) {
+            iframe = iframes[i];
             if (iframe.hasAttribute('data-meta')) {
                 ifrs.push(iframe);
             }
@@ -217,7 +224,7 @@
             replaceEntityText();
         }
         else {
-            var intrvl = setInterval(function () {
+            intrvl = setInterval(function () {
                 if (ct === ifrs.length) {
                     replaceEntityText();
                     clearInterval(intrvl);
@@ -229,11 +236,11 @@
     // EXPORTS
     if (globalFunction) {
         // Will not work with external files, as document.write operates immediately
-        this[globalFunction] = function (lookup) {
+        window[globalFunction] = function (lookup) {
             // Being handled elsewhere, but still need a function to keep it short (could do with script type) and explicit (could do with just string and no function call, but not clear for entities)
             //setText(lookup);
             //document.write(text);
         };
     }
-    this.entityIframeLoad = entityIframeLoad; // Needed by IE which needs inline onload on iframes
+    window.entityIframeLoad = entityIframeLoad; // Needed by IE which needs inline onload on iframes
 }());

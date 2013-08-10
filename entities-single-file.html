@@ -14,9 +14,8 @@
     <!-- Attach required library file -->
     <script src="entities.js?global=e"></script>
 
-    <!-- 3. Can also make entity declarations in CSS (allows external use); can remove the script if not supporting IE
-            or add call in entities file. -->
-    <script>document.createElement('ent');</script>
+    <!-- 3. Can also make entity declarations in CSS (allows external use)-->
+    <!--[if lt IE 9]><!--><script>document.createElement('ent');</script><!--<![endif]-->
     <style>
         ent[ent=aName]:before {
             content:'Luke Skywalker';

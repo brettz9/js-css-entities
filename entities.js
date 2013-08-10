@@ -210,7 +210,8 @@
     //  though called again by necessity if data-meta iframes detected)
     addMetasToMap(metas);
     
-    // EVENT ATTACHMENT    
+    // EVENT ATTACHMENT
+    // Todo: Switch to a Window.prototype.addEventListener shim with this capability
     addListener(window, 'DOMContentLoaded', function () {
         var i, il, iframe, intrvl, iframes = d.getElementsByTagName('iframe');
         for (i = 0, il = iframes.length; i < il; i++) {

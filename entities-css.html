@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <!-- 3. Can also make entity declarations in CSS (allows external use);
-    if the JS file is included, the next line is not needed. -->
+    if the JS file is included and used for the specified element, the next line is not needed. -->
     <!--[if lt IE 9]><!--><script>document.createElement('ent');</script><!--<![endif]-->
     <style>
+        /* Will only work in IE8+ standards document mode */
         ent[ent=aName]:before {
             content:'Luke Skywalker';
             color:red; /* Offers benefit of letting us style text in a consistent way; 

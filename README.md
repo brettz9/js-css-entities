@@ -60,6 +60,8 @@ defining entities are possible:
             allows retrieval of meta elements defined in an iframe in the
             body of the document so that this approach will also allow 
             external file definitions
+        1. (One could also simply define entities such as `var copy = '\u00a9';`
+            and then execute that, but that has the disadvantage of adding globals.)
     1. Advantages:
         1. Should work well in all well-used browsers
         1. Easy to write definitions and references

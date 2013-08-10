@@ -153,7 +153,7 @@
             if (type === 'DOMContentLoaded') { // Older listener support in IE coincides with non-support of DOMContentLoaded
                 type = 'load';
             }
-            obj.attachEvent('on' + type, listener);
+            obj.attachEvent('on' + type, listener); // Todo: improve
         }
     }
 

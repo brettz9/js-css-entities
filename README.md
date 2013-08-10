@@ -59,7 +59,9 @@ defining entities are possible:
             attribute set to "{entity name}={entity name}"; script also
             allows retrieval of meta elements defined in an iframe in the
             body of the document so that this approach will also allow 
-            external file definitions
+            external file definitions; note that this meta extension has
+            been proposed at http://wiki.whatwg.org/wiki/MetaExtensions 
+            thereby making them "legal HTML5 meta names" per the wiki.
         1. (One could also simply define entities such as `var copy = '\u00a9';`
             and then execute that, but that has the disadvantage of adding globals.)
     1. Advantages:

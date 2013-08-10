@@ -1,3 +1,5 @@
+# js-css-entities
+
 HTML-BASED CUSTOM ENTITY REFERENCES are unfortunately not supported in 
 text/html (and XML support is spotty), despite their convenience in
 authoring, especially for non-technical authors or those who wish to
@@ -101,3 +103,6 @@ approaches:
         1. HTML5-standard "data" tag with "data-ent" attribute
     1. Script tags (<script>e('{entity name}')</script>)
 
+# Supports
+
+Tested in IE10 with document mode set to IE7-IE10. Tested in Firefox 23.0

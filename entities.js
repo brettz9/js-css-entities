@@ -18,7 +18,7 @@
     // PRIVATE STATIC UTILITIES
     /**
     * @private
-    * @constant
+    * @static
     */
     /*!
     * From: (c) 2012 Steven Levithan <http://slevithan.com/>
@@ -41,10 +41,20 @@
             return chars.join("");
         };
     }
-    
+
+    /**
+    * Shim for IE7 (since we can't override prototype objects like Node or Element until IE8)
+    * @see A full shim is available to handle style retrieval at {@link https://raw.github.com/termi/ES5-DOM-SHIM/0.8/__SRC/a.ielt8.js} (MIT license)
+    * @private
+    * @static
+    */
+    function _hasAttribute (el, name) {
+        return el.getAttribute(name) !== null; // Despite earlier standard requiring empty string, this at least works in IE 10 using IE7-9 modes
+    }
+
     /**
     * @private
-    * @constant
+    * @static
     */
     function preg_quote (str, delimiter) {
         // http://kevin.vanzonneveld.net
@@ -79,7 +89,6 @@
         );
     }
     
-    
     function setText (lookup) {
         if (!map[lookup]) {
             alert(
@@ -100,14 +109,14 @@
             // One might add other conditions here to transform to different kinds of elements, etc. or
             //   allow a callback or two to check and define text or replacement node
             // The first two conditions are not very helpful since possible as HTML entities
-            if (entity.hasAttribute(attPrefix+'dec')) {
+            if (_hasAttribute(entity, attPrefix + 'dec')) {
                 text = String.fromCodePoint(parseInt(entity.getAttribute(attPrefix+'dec'), 10));
             }
-            else if (entity.hasAttribute(attPrefix+'hex')) {
+            else if (_hasAttribute(entity, attPrefix + 'hex')) {
                 text = String.fromCodePoint(parseInt(entity.getAttribute(attPrefix+'hex'), 16));
             }
             else {
-                lookup = entity.hasAttribute(attPrefix + 'ent') ? entity.getAttribute(attPrefix + 'ent') : 
+                lookup = _hasAttribute(entity, attPrefix + 'ent') ? entity.getAttribute(attPrefix + 'ent') :
                             entityReferenceName === 'data' ? false : entity.textContent || entity.innerText;
                 if (lookup === false) { // Disallow plain <data> elements as could be used for other purposes
                     break;
@@ -135,8 +144,8 @@
         var i, metalen, pair, meta;
         for (i = 0, metalen = metas.length; i < metalen; i++) {
             meta = metas[i];
-            if (    meta.hasAttribute('content') && 
-                    meta.hasAttribute('name') && 
+            if (_hasAttribute(meta, 'content') &&
+                    _hasAttribute(meta, 'name') &&
                     meta.getAttribute('name') === 'entity'
                 ) {
                 pair = meta.getAttribute('content').split('=', 2);
@@ -216,7 +225,7 @@
         var i, il, iframe, intrvl, iframes = d.getElementsByTagName('iframe');
         for (i = 0, il = iframes.length; i < il; i++) {
             iframe = iframes[i];
-            if (iframe.hasAttribute('data-meta')) {
+            if (_hasAttribute(iframe, 'data-meta')) {
                 ifrs.push(iframe);
             }
         }

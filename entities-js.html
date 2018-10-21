@@ -2,10 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <title>Entities demo</title>
     <!-- 1. Can make JavaScript-utilized entity declarations in HTML; see http://wiki.whatwg.org/wiki/MetaExtensions -->
     <meta name="entity" content="repeat=My repeatable text" />
     <meta name="entity" content="hello=Hi there!" />
-    
+
     <!-- 2. Can also make JavaScript-utilized entity declarations in JavaScript (useful externally
     since client-side includes are lamentably missing (as are easy JS import statements)) -->
     <script>
@@ -23,7 +24,7 @@
 <!-- onload call must be added manually for IE -->
 <iframe src="external-entity-file.html" data-meta="" onload="entityIframeLoad(event);"></iframe>
 
-<!-- Note for the below, that unless we use application/xhtml+xml, we cannot 
+<!-- Note for the below, that unless we use application/xhtml+xml, we cannot
 reliably use self-closing elements in HTML -->
 
 <!-- JAVASCRIPT/HTML-BASED CUSTOM ENTITY REFERENCES -->

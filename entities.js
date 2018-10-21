@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    var text, lookup, entity,
+    var text, entity,
         globalFunction, element, entityReferenceName, attPrefix,
         d = document,
         ct = 0,
@@ -70,25 +70,25 @@
             val = currentScriptURL.match(pattern);
         return val ? decodeURIComponent(val[1]) : null;
     }
-    
+
     /**
     * @private
     * @static
     */
     function replaceNodeWithText (node, value) {
         node.parentNode.replaceChild(
-                document.createTextNode(value), 
+                document.createTextNode(value),
                 node
         );
     }
-    
+
     function insertBeforeNodeWithText (node, value) {
         node.parentNode.insertBefore(
-                document.createTextNode(value), 
+                document.createTextNode(value),
                 node
         );
     }
-    
+
     function setText (lookup) {
         if (!map[lookup]) {
             alert(
@@ -100,7 +100,7 @@
         text = map[lookup];
         return true;
     }
-    
+
     function replaceEntityText () {
         var scripts, i, sl, script, lookup;
         entities = d.getElementsByTagName(entityReferenceName);
@@ -127,7 +127,7 @@
             }
             replaceNodeWithText(entity, text);
         }
-        
+
         scripts = d.getElementsByTagName('script');
         for (i = 0, sl = scripts.length; i < sl; i++) {
             script = scripts[i];
@@ -153,7 +153,7 @@
             }
         }
     }
-    
+
     function addListener (obj, type, listener) {
         if (obj.addEventListener) {
             obj.addEventListener(type, listener, false);
@@ -186,7 +186,7 @@
                 rule = decl[j];
                 rulesStr += rule[0] + ':' + rule[1] + (rule[2] ? ' !important' : '') + ';\n';
             }
-     
+
             if (s.insertRule) {
                 s.insertRule(selector + '{' + rulesStr + '}', s.cssRules.length);
             }
@@ -202,7 +202,7 @@
             imetas = (metaHeadOnly ? idoc.head : idoc).getElementsByTagName('meta');
         addMetasToMap(imetas);
     }
-    
+
     globalFunction = getURLQueryParam('global');
     element = getURLQueryParam('element');
     entityReferenceName = element || 'entity'; // could change to "data" for standard approach
@@ -213,12 +213,12 @@
 
     // Avoid need for defining styles to hide the meta iframes
     addStylesheetRules([['iframe[data-meta]', ['display', 'none']]]);
-    
-    // Requires that meta tags be placed above this script (added here 
+
+    // Requires that meta tags be placed above this script (added here
     //  so document.write method e() doesn't need to wait for page domcontentloaded,
     //  though called again by necessity if data-meta iframes detected)
     addMetasToMap(metas);
-    
+
     // EVENT ATTACHMENT
     // Todo: Switch to a Window.prototype.addEventListener shim with this capability
     addListener(window, 'DOMContentLoaded', function () {
@@ -229,7 +229,7 @@
                 ifrs.push(iframe);
             }
         }
-        
+
         if (!ifrs.length) { // There are no meta iframes, so no need to wait
             replaceEntityText();
         }
@@ -242,14 +242,14 @@
             }, 100);
         }
     });
-    
+
     // EXPORTS
     if (globalFunction) {
         // Will not work with external files, as document.write operates immediately
         window[globalFunction] = function (lookup) {
             // Being handled elsewhere, but still need a function to keep it short (could do with script type) and explicit (could do with just string and no function call, but not clear for entities)
-            //setText(lookup);
-            //document.write(text);
+            // setText(lookup);
+            // document.write(text);
         };
     }
     window.entityIframeLoad = entityIframeLoad; // Needed by IE which needs inline onload on iframes

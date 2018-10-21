@@ -2,10 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <title>Entities demo</title>
     <!-- 1. Can make JavaScript-utilized entity declarations in HTML; see http://wiki.whatwg.org/wiki/MetaExtensions -->
     <meta name="entity" content="repeat=My repeatable text" />
     <meta name="entity" content="hello=Hi there!" />
-    
+
     <!-- 2. Can also make JavaScript-utilized entity declarations in JavaScript (useful externally
     since client-side includes are lamentably missing (as are easy JS import statements)) -->
     <script>
@@ -24,24 +25,23 @@
         /* Will only work in IE8+ standards document mode */
         ent[ent=aName]:before {
             content:'Luke Skywalker';
-            color:red; /* Offers benefit of letting us style text in a consistent way; 
+            color:red; /* Offers benefit of letting us style text in a consistent way;
                             we could also change certain entity types to block display */
         }
-        
-        /* Being silly (unless we have a need to display text only for CSS users), 
+
+        /* Being silly (unless we have a need to display text only for CSS users),
             we allow the entity to be declared inline */
         ent[ent=myName][value]:before {
             content: attr(value)
         }
     </style>
-    
 </head>
 <body>
 
 <!-- onload call must be added manually for IE -->
 <iframe src="external-entity-file.html" data-meta="" onload="entityIframeLoad(event);"></iframe>
 
-<!-- Note for the below, that unless we use application/xhtml+xml, we cannot 
+<!-- Note for the below, that unless we use application/xhtml+xml, we cannot
 reliably use self-closing elements in HTML -->
 
 <!-- JAVASCRIPT/HTML-BASED CUSTOM ENTITY REFERENCES -->
@@ -60,7 +60,7 @@ reliably use self-closing elements in HTML -->
 <script>e('repeat')</script>
 
 <!-- CSS-BASED CUSTOM ENTITY REFERENCES -->
-<!-- Note that we cannot put content inside as a fall-back with CSS though, 
+<!-- Note that we cannot put content inside as a fall-back with CSS though,
 as the "content" property will use the same visibility as the contents-->
 
 <ent ent="aName"></ent>

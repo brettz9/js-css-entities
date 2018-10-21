@@ -1,0 +1,7 @@
+{
+  "plugins": {
+      "no-multiple-toplevel-headings": false,
+      "list-item-indent": false,
+      "list-item-spacing": false
+  }
+}
